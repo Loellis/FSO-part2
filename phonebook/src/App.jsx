@@ -3,22 +3,31 @@ import { useState } from 'react'
 const App = () => {
   const [persons, setPersons] = useState([{ 
     name: 'Arto Hellas',
-    id: 'Arto Hellas'
+    id: 'Arto Hellas',
+    num: '040-1234567'
   }]) 
   const [newName, setNewName] = useState('')
+  const [newNum, setNewNum] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
 
     // If new name is blank, don't add
     if (newName.trim() === "") {
-      console.log("New name is blank.")
+      alert("Name field is blank.")
+      return
+    }
+
+    // If new num is less than 8 digits, don't add
+    if (!/^\d{8,}$/.test(newNum)) {
+      alert('Number must be 8 digits or more.')
       return
     }
 
     const personObject = {
       name: newName,
-      id: newName
+      id: newName,
+      num: newNum
     }
 
     // If person object with same ID already registered, don't add
@@ -28,11 +37,13 @@ const App = () => {
     }
 
     setPersons(persons.concat(personObject))
+    setNewNum("")
     setNewName("")
 
   }
 
   const handleNewPerson = (event) => setNewName(event.target.value)
+  const handleNewNum = (event) => setNewNum(event.target.value)
 
 
   return (
@@ -46,11 +57,18 @@ const App = () => {
                 />
         </div>
         <div>
+          number: <input
+                    value={newNum}
+                    onChange={handleNewNum}
+                    type="number"
+                  />
+        </div>
+        <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-        {persons.map((person) => <p key={person.name}>{person.name}</p>)}
+        {persons.map((person) => <p key={person.name}>{person.name} {person.num}</p>)}
     </div>
   )
 }
