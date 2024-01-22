@@ -23,7 +23,7 @@ const App = () => {
 
     // If person object with same ID already registered, don't add
     if (persons.findIndex(element => element.id === personObject.id) > -1) {
-      console.log("Object with that key already exists.")
+      alert(`${newName} is already added to the phonebook.`)
       return
     }
 
