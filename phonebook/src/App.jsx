@@ -57,6 +57,10 @@ const App = () => {
   const handleNewNum = (event) => setNewNum(event.target.value)
   const handleFilterChange = (event) => setFilter(event.target.value)
 
+  const handleDeletePerson = (id) => {
+    setPersons(persons.filter(p => p.id !== id))
+  }
+
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
@@ -77,7 +81,7 @@ const App = () => {
         handleNewNum={handleNewNum}
       />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} onDelete={handleDeletePerson}/>
     </div>
   )
 }
