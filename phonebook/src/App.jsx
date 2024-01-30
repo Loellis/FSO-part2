@@ -1,31 +1,27 @@
-import { useEffect, useState } from 'react'
-import PersonForm from './components/PersonForm';
-import Persons from './components/Persons';
-import Filter from './components/Filter';
-import axios from "axios"
-
+import { useEffect, useState } from "react"
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
+import Filter from "./components/Filter";
+import personService from "./services/persons"
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-  const [newName, setNewName] = useState('')
-  const [newNum, setNewNum] = useState('')
-  const [filter, setFilter] = useState('')
+  const [newName, setNewName] = useState("")
+  const [newNum, setNewNum] = useState("")
+  const [filter, setFilter] = useState("")
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3002/persons")
-      .then(response => {
-        console.log(response.data)
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
-
-  console.log(persons)
 
   const addPerson = (event) => {
     event.preventDefault()
 
-    // If new name is blank, don't add
+    // If new name is blank, don"t add
     if (newName.trim() === "") {
       alert("Name field is blank.")
       return
@@ -33,14 +29,13 @@ const App = () => {
 
     // If new num is less than 8 digits, don't add
     if (!/^\d{8,}$/.test(newNum)) {
-      alert('Number must be 8 digits or more.')
+      alert("Number must be 8 digits or more.")
       return
     }
 
     const personObject = {
       name: newName,
-      id: persons.length + 1,
-      num: newNum
+      number: newNum
     }
 
     // If person object with same ID already registered, don't add
@@ -49,10 +44,13 @@ const App = () => {
       return
     }
 
-    setPersons(persons.concat(personObject))
-    setNewNum("")
-    setNewName("")
-
+    personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewNum("")
+        setNewName("")
+      })
   }
 
   const handleNewPerson = (event) => setNewName(event.target.value)
