@@ -37,20 +37,26 @@ const App = () => {
       name: newName,
       number: newNum
     }
-
-    // If person object with same ID already registered, don't add
-    if (persons.findIndex(element => element.name === personObject.name) > -1) {
-      alert(`${newName} is already added to the phonebook.`)
-      return
-    }
-
-    personService
+  
+  
+    const personIndex = persons.findIndex(person => person.name === personObject.name)
+    if (personIndex !== -1 && window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
+        personService
+        .update(persons[personIndex].id, personObject)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
+          setNewNum("")
+          setNewName("")
+        })
+    } else {
+      personService
       .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNewNum("")
         setNewName("")
       })
+    }
   }
 
   const handleNewPerson = (event) => setNewName(event.target.value)
