@@ -84,9 +84,26 @@ const App = () => {
   const handleNewNum = (event) => setNewNum(event.target.value)
   const handleFilterChange = (event) => setFilter(event.target.value)
 
-  const handleDeletePerson = (id) => {
-    setPersons(persons.filter(p => p.id !== id))
-  }
+  const handleDeletePerson = (person) => {
+    personService
+      .delete_person(person.id)
+      .then(() => {
+        setPersons(persons.filter(p => p.id !== person.id))
+        setNotification(`User: ${person.name} has been deleted`)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setPersons(persons.filter(p => p.id !== person.id))
+        setNotification(`Information of ${person.name} has already been removed from the server`)
+        setIsError(true)
+        setTimeout(() => {
+          setNotification(null)
+          setIsError(false)
+        }, 5000)
+      })
+    }
 
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
