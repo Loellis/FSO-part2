@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 import personService from "./services/persons"
 
 const App = () => {
@@ -9,6 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState("")
   const [newNum, setNewNum] = useState("")
   const [filter, setFilter] = useState("")
+  const [notification, setNotification] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     personService
@@ -23,13 +26,23 @@ const App = () => {
 
     // If new name is blank, don"t add
     if (newName.trim() === "") {
-      alert("Name field is blank.")
+      setNotification("Username is blank.")
+      setIsError(true)
+      setTimeout(() => {
+        setNotification(null)
+        setIsError(false)
+      }, 5000)
       return
     }
 
     // If new num is less than 8 digits, don't add
     if (!/^\d{8,}$/.test(newNum)) {
-      alert("Number must be 8 digits or more.")
+      setNotification("Number must be 8 digits or more.")
+      setIsError(true)
+      setTimeout(() => {
+        setNotification(null)
+        setIsError(false)
+      }, 5000)
       return
     }
 
@@ -47,6 +60,10 @@ const App = () => {
           setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
           setNewNum("")
           setNewName("")
+          setNotification(`Updated number of user: ${personObject.name}`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
         })
     } else {
       personService
@@ -55,6 +72,10 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewNum("")
         setNewName("")
+        setNotification(`Added user: ${personObject.name}`)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
     }
   }
@@ -74,6 +95,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} isError={isError}/>
       <Filter 
         filter={filter}
         handleFilterChange={handleFilterChange} 
