@@ -17,12 +17,11 @@ const App = () => {
       setCountries([])
       setSelectedCountry(null)
       setMessage(null)
-      return;
+      return
     }
 
     axios.get(`https://restcountries.com/v3.1/name/${query}`)
       .then(response => {
-        console.log(response)
         const data = response.data
         if (data.length > 10) {
           setMessage("Too many matches, specify another filter")
@@ -36,7 +35,7 @@ const App = () => {
         }
       })
       .catch(error => {
-        console.error('Error fetching data:', error)
+        console.error("Error fetching data:", error)
         setMessage(null)
         setCountries([])
       })
