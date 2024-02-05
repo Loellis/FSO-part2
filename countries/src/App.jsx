@@ -27,7 +27,7 @@ const App = () => {
           setMessage("Too many matches, specify another filter")
           setCountries([])
         } else if (data.length === 1) {
-          setSelectedCountry(data[0])
+          handleCountrySelect(data[0])
         } else {
           setMessage(null)
           setCountries(data)
