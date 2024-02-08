@@ -86,7 +86,7 @@ const App = () => {
 
   const handleDeletePerson = (person) => {
     personService
-      .delete_person(person.id)
+      .deletePerson(person.id)
       .then(() => {
         setPersons(persons.filter(p => p.id !== person.id))
         setNotification(`User: ${person.name} has been deleted`)
