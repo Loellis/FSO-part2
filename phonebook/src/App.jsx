@@ -65,14 +65,6 @@ const App = () => {
             setNotification(null)
           }, 5000)
         })
-        .catch(error => {
-          setNotification(error.message)
-          setIsError(true)
-          setTimeout(() => {
-            setNotification(null)
-            setIsError(false)
-          }, 10000)
-        })
     } else {
       personService
       .create(personObject)
@@ -84,14 +76,6 @@ const App = () => {
         setTimeout(() => {
           setNotification(null)
         }, 5000)
-      })
-      .catch(error => {
-        setNotification(error.message)
-        setIsError(true)
-        setTimeout(() => {
-          setNotification(null)
-          setIsError(false)
-        }, 10000)
       })
     }
   }
