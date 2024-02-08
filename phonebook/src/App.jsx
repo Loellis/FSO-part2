@@ -36,7 +36,7 @@ const App = () => {
     }
 
     // If new num is less than 8 digits, don't add
-    if (!/^\d{8,}$/.test(newNum)) {
+    if (!/^[\d-]{8,}$/.test(newNum)) {
       setNotification("Number must be 8 digits or more.")
       setIsError(true)
       setTimeout(() => {
@@ -65,6 +65,14 @@ const App = () => {
             setNotification(null)
           }, 5000)
         })
+        .catch(error => {
+          setNotification(error.message)
+          setIsError(true)
+          setTimeout(() => {
+            setNotification(null)
+            setIsError(false)
+          }, 10000)
+        })
     } else {
       personService
       .create(personObject)
@@ -76,6 +84,14 @@ const App = () => {
         setTimeout(() => {
           setNotification(null)
         }, 5000)
+      })
+      .catch(error => {
+        setNotification(error.message)
+        setIsError(true)
+        setTimeout(() => {
+          setNotification(null)
+          setIsError(false)
+        }, 10000)
       })
     }
   }
